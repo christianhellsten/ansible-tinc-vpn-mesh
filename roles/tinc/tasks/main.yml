@@ -11,6 +11,11 @@
     name=tinc
     state=latest
 
+- name: install rsync
+  package: >
+    name=rsync
+    state=latest
+
 - name: create tinc systemd service file (redhat)
   template: >
     src=tinc.service.j2
@@ -61,7 +66,7 @@
 - name: ensure tinc hosts file binds to physical ip address
   lineinfile: >
     dest=/etc/tinc/{{ netname }}/hosts/{{ inventory_hostname }}
-    line="Address = {{ physical_ip }}"
+    line="Address = {{ public_ip }}"
     create=yes
   notify:
     - restart tinc
@@ -93,6 +98,13 @@
   notify:
     - restart tinc
 
+- name: ensure ./fetch is empty
+  file: >
+    path=fetch
+    state=absent
+  run_once: true
+  delegate_to: localhost
+
 - name: fetch tinc hosts file after key creation
   fetch: >
     src=/etc/tinc/{{ netname }}/hosts/{{ inventory_hostname }}
@@ -113,7 +125,7 @@
 
 - name: ensure tinc is started
   service: >
-    name=tinc
+    name=tinc@vpn
     enabled=yes
     state=started
     pattern=tincd -n {{ netname }}

@@ -1,1 +1,4 @@
 fetch
+**.hosts
+**.log
+**.retry
