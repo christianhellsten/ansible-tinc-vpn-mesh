@@ -140,3 +140,5 @@
     rule: allow
     port: 655
     comment: "allow VPN (tincd) traffic"
+  tags:
+    - ufw

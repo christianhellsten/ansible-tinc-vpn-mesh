@@ -2,8 +2,8 @@
 
 - hosts: vpn
   roles:
-    - tinc
+    - { role: tinc, become: false, tags: ['tinc'] }
 
 - hosts: removevpn
   roles:
-    - tinc-remove
+    - { role: tinc-remove, become: false, tags: ['tinc-remove'] }
